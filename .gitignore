@@ -2,3 +2,4 @@
 train/
 model/__pycache__/
 util/__pycache__/
+data/Train-All.pt
