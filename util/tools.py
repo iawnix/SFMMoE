@@ -1,3 +1,34 @@
+from rdkit import Chem
+from rdkit.Chem import Descriptors
+from data_pyg import Pdb2PYG
+from molden_file import molden_mol
+
+import os
+import uuid
+import datetime
+import itertools
+import subprocess
+
+import torch
+
+"""
+convert rdkit mol to pyg data
+"""
+
+def CMD_RUN(cmd):
+
+    proc = subprocess.Popen(cmd, bufsize=-1, shell=True, encoding = "utf-8", stderr = subprocess.PIPE,stdout=subprocess.PIPE)
+    ret = proc.communicate(input = None)
+    jobid = proc.pid
+    out,error = ret[0],ret[1]
+    code = proc.returncode
+    if error != "":
+        if not code:
+            return 1, out, error
+        else:
+            return 0, out, error
+    else:
+        return 1, out, error
 
 
 # 读入mol之后需要进行pyg data的制作
@@ -168,9 +199,11 @@ class mol_2_pyg_data():
                          , qm_feat = _gaps)([])
 
              # 保存
-            
             torch.save(pt, final_pdb_fp.replace(".pdb", ".pt"))
 
            
             return pt, hl_4
+
+if __name__ == "__main__":
+    pass
 
